@@ -1,39 +1,22 @@
-import reactImg from "./assets/react-core-concepts.png";
-import componentsImg from "./assets/components.png";
-import { CORE_CONCEPTS } from "./data.js";
-
-const reactDescription = ["Fundamental", "Crucial", "Core"];
-
-function randomNum(max) {
-  return Math.floor(Math.random() * (max + 1));
-}
-
-function Header() {
-  const firstW = reactDescription[randomNum(reactDescription.length - 1)];
-
-  return (
-    <header>
-      <img src={reactImg} alt="Stylized atom" />
-      <h1>React Essentials</h1>
-      <p>
-        {firstW} React concepts you will need for almost any app you are going
-        to build!
-      </p>
-    </header>
-  );
-}
-
-function Core({image, title, description}) {
-  return (
-    <li>
-      <img src={image} alt={title} />
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </li>
-  );
-}
+import { useState } from "react";
+import { CORE_CONCEPTS } from "./data-with-examples.js";
+import { EXAMPLES } from "./data-with-examples.js";
+import Header from "./components/Header/Header.jsx";
+import Core from "./components/Core.jsx";
+import TabButton from "./components/TabButton/TabButton.jsx";
 
 function App() {
+  const [selectedTopic, setSelectedTopic] = useState();
+
+  function handleSelect(selectedButton) {
+    console.log(selectedButton);
+    setSelectedTopic(selectedButton);
+    switch (selectedTopic) {
+      case "coponents":
+        break;
+    }
+  }
+
   return (
     <div>
       <Header></Header>
@@ -41,13 +24,37 @@ function App() {
         <section id="core-concepts">
           <h2>Core concepts</h2>
           <ul>
-            <Core {...CORE_CONCEPTS[0]} />
-            <Core {...CORE_CONCEPTS[1]} />
-            <Core {...CORE_CONCEPTS[2]} />
-            <Core {...CORE_CONCEPTS[3]} />
+            {CORE_CONCEPTS.map((item) => <Core key={item.title} {...item}/>)}
           </ul>
         </section>
-        <h2>Time to get started!</h2>
+        <section id="examples">
+          <h2>Examples</h2>
+          <menu>
+            <TabButton isSelected={selectedTopic === 'components'} onSelect={() => handleSelect("components")}>
+              Components
+            </TabButton>
+            <TabButton isSelected={selectedTopic === 'jsx'} onSelect={() => handleSelect("jsx")}>
+              JSX
+            </TabButton>
+            <TabButton isSelected={selectedTopic === 'props'} onSelect={() => handleSelect("props")}>
+              Props
+            </TabButton>
+            <TabButton isSelected={selectedTopic === 'state'} onSelect={() => handleSelect("state")}>
+              State
+            </TabButton>
+          </menu>
+          {!selectedTopic ? (
+            <p>Select topic</p>
+          ) : (
+            <div id="tab-content">
+              <h3>{EXAMPLES[selectedTopic].title}</h3>
+              <p>{EXAMPLES[selectedTopic].description}</p>
+              <pre>
+                <code>{EXAMPLES[selectedTopic].code}</code>
+              </pre>
+            </div>
+          )}
+        </section>
       </main>
     </div>
   );
