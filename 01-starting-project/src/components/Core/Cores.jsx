@@ -1,4 +1,4 @@
-import Core from "./Core.jsx"
+import Core from "./Core.jsx";
 import { CORE_CONCEPTS } from "../../data-with-examples.js";
 export default function Cores() {
   return (
